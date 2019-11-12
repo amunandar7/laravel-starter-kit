@@ -17,6 +17,8 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset('css/skins/_all-skins.min.css') }}">
+    <!-- Pace style -->
+    <link rel="stylesheet" href="{{ asset('vendors/pace/pace.min.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -278,6 +280,8 @@
 <script src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- PACE -->
+<script src="{{ asset('vendors/pace/pace.min.js') }}"></script>
 <!-- SlimScroll -->
 <script src="{{ asset('vendors/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
 <!-- FastClick -->
@@ -290,17 +294,13 @@
 <script src="{{ asset('js/adminlte.js') }}"></script>
 {{--<script src="{{ asset('js/adminlte.min.js') }}"></script>--}}
 <script>
+    // To make Pace works on Ajax calls
+    $(document).ajaxStart(function () {
+        Pace.restart()
+    })
     $(document).ready(function () {
         $('.sidebar-menu').tree()
     })
-</script>
-@if (Session::has('gritter'))
-    <script>
-        $.gritter.add({title: "{!! session('gritter') !!}"});
-    </script>
-@endif
-@stack('scripts')
-<script>
     function modalAjax(url, data) {
         $.ajax({
             method: 'POST',
@@ -318,5 +318,11 @@
         $("#modal-image").modal('show');
     }
 </script>
+@if (Session::has('gritter'))
+    <script>
+        $.gritter.add({title: "{!! session('gritter') !!}"});
+    </script>
+@endif
+@stack('scripts')
 </body>
 </html>
