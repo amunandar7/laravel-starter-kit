@@ -6,7 +6,7 @@
 <div class="box">
     <div class="box-header">
     @if($enable_add)
-        <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn btn-primary pull-right">Tambah</a>
+        <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn btn-primary pull-right">Add</a>
     @endif
     @if(sizeof($filters) > 0)
         <div class="row">
@@ -15,7 +15,7 @@
                     @if(!is_array($data[3]) && $data[3] == 'datepicker')
                         <input id="dtFilter{{$idx}}" placeholder="{{$data[0]}}" class="form-control dt-datepicker" />
                     @else
-                        <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' select2Filter'}}">
+                        <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' '}}">
                             <option value="">{{$data[0]}}</option>
                             @if(is_array($data[3]))
                                 @foreach($data[3] AS $val => $text)
@@ -49,9 +49,10 @@
 @endsection
 
 @push('css')
-<link rel="stylesheet" href="{{ asset('vendors/css/select2.css') }}" />
-<link rel="stylesheet" href="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.css') }}" />
+        <link rel="stylesheet" href="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.css') }}" />
         <link rel="stylesheet" href="{{ asset('vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('vendors/select2/dist/css/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendors/select2-bootstrap/dist/select2-bootstrap.css') }}">
 @endpush
 
 
@@ -59,31 +60,9 @@
 <script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendors/DataTables/extensions/Responsive/js/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ asset('vendors/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('vendors/js/moment.js') }}"></script>
 <script src="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.js') }}"></script>
-
-<script>
-    $('#appTable').on('click', '.modal-schedule', function(){
-        var value = $(this).data('value')
-        
-        $.ajax({
-            url: "{{ url('schedule/get-all-schedule') }}/"+value,
-            success: function(res) {
-                var html = ''
-                res.forEach(function(item) {
-                    html += "<tr>" +
-                                "<td>"+ item.hari.name +"</td>" +
-                                "<td>"+ item.schedule_from +"</td>" +
-                                "<td>"+ item.schedule_to +"</td>" +
-                            "<tr>"
-                })
-
-                $('#jadwal-dokter > tbody').html(html)
-            }
-        })
-    })
-</script>
-
 <script>
     var delay = (function(){
     var timer = 0;

@@ -68,7 +68,7 @@
                                     <li><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                <img src="{{ asset('images/dummy-profile.png') }}" class="img-circle" alt="User Image">
                                             </div>
                                             <h4>
                                                 Support Team
@@ -212,9 +212,9 @@
 
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b>Version</b> 2.4.18
+            <b>Version</b> 1.0
         </div>
-        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
+        <strong>Copyright &copy; 2019 <a href="https://github.com/amunandar7">Achmad Munandar</a>.</strong> All rights
         reserved.
     </footer>
 

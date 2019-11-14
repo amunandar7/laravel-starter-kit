@@ -120,19 +120,18 @@ class DatatablesController extends Controller
         } else {
             $datas = DB::table($this->tableName)->where($this->tableName . '.deleted_at', null)->where('id', $id)->first();
         }
-        $body = '<table>';
+        $body = '<table class="table table-striped table-responsive">';
         foreach ($datas AS $name => $val) {
             if (!in_array($name, $excepts)) {
                 if ($name != "longitude") {
                     $body .= '<tr>';
                     if ($name == "latitude") {
-                        $body .= '<td style="vertical-align: top;color:#e77929">Location</td>';
+                        $body .= '<td style="vertical-align: top;">Location</td>';
                     } else {
-                        $body .= '<td style="vertical-align: top;color:#e77929">' . StringHelper::humanize($name) . "</td>";
+                        $body .= '<td style="vertical-align: top;">' . StringHelper::humanize($name) . "</td>";
                     }
-                    $body .= '<td style="vertical-align: top;color:#e77929"> : </td>';
-                    if (in_array($name,
-                        ['picture', 'logo', 'photo', 'recipe_photo'])) {
+                    $body .= '<td style="vertical-align: top;"> : </td>';
+                    if (in_array($name, $this->class->getImageColumnTypes())) {
                         if ($val != null) {
                             $body .= '<td style="vertical-align: top;"><img src="' . url($val) . '" class="img-fluid" /></td>';
                         } else {

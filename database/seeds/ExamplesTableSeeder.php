@@ -25,15 +25,17 @@ class ExamplesTableSeeder extends Seeder
         }
 
 
+
         for($i = 0; $i < 100; $i++) {
             DB::table('examples')->insert([
                 'example_category_id' => rand(1, $categoriesCount),
                 'name' => $faker->name,
+                'image' => $faker->imageUrl(300,300),
                 'email' => $faker->email,
                 'password' => bcrypt($faker->password(6,10)),
                 'example_date' => $faker->date("Y-m-d"),
                 'description' => $faker->randomHtml(4,4),
-                'status' => rand(0, sizeof(ExampleStatus::getLabels())-1),
+                'status' => rand(0, sizeof(ExampleStatus::get_labels())-1),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
