@@ -2,91 +2,62 @@
 @section('title', $title)
 @section('subtitle', $subtitle)
 @section('content')
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">
-            {{ $title }}
-            @if($enable_add)
-            <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn btn-seehat pull-right">Tambah</a>
-            @endif
-        </h4>
-        @if(sizeof($filters) > 0)
+
+<div class="box">
+    <div class="box-header">
+    @if($enable_add)
+        <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn btn-primary pull-right">Tambah</a>
+    @endif
+    @if(sizeof($filters) > 0)
         <div class="row">
             @foreach($filters AS $idx => $data)
-            <div class="col-12 col-sm-3">
-                @if(!is_array($data[3]) && $data[3] == 'datepicker')
-                <input id="dtFilter{{$idx}}" placeholder="{{$data[0]}}" class="form-control dt-datepicker" />
-                @else
-                <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' select2Filter'}}">
-                    <option value="">{{$data[0]}}</option>
-                    @if(is_array($data[3]))
-                    @foreach($data[3] AS $val => $text)
-                    <option value="{{$val}}">{{$text}}</option>
-                    @endforeach
+                <div class="col-12 col-sm-3">
+                    @if(!is_array($data[3]) && $data[3] == 'datepicker')
+                        <input id="dtFilter{{$idx}}" placeholder="{{$data[0]}}" class="form-control dt-datepicker" />
+                    @else
+                        <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' select2Filter'}}">
+                            <option value="">{{$data[0]}}</option>
+                            @if(is_array($data[3]))
+                                @foreach($data[3] AS $val => $text)
+                                    <option value="{{$val}}">{{$text}}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     @endif
-                </select>
-                @endif
-            </div>
+                </div>
             @endforeach
         </div>
         <br>
-        @endif
-        <div class="table-responsive">
-            <table  id="appTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        @foreach($columns AS $idx => $col)
-                        @if(!in_array($idx, $hidden_columns))
+    @endif
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table id="appTable" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                @foreach($columns AS $idx => $col)
+                    @if(!in_array($idx, $hidden_columns))
                         <th>{{\App\Helpers\StringHelper::humanize($col)}}</th>
-                        @endif
-                        @endforeach
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+                    @endif
+                @endforeach
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+        </table>
     </div>
-</div>
-
-<div id="modalschedule" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="display:inline !important;">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Tabel Jadwal Dokter</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-stripped" id="jadwal-dokter">
-                    <thead>
-                        <tr>
-                            <th>Hari</th>
-                            <th>Dari</th>
-                            <th>Sampai</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-seehat" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
 
 @push('css')
-<link rel="stylesheet" href="{{ asset('vendors//css/select2.css') }}">
-<link rel="stylesheet" href="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.css') }}">
+<link rel="stylesheet" href="{{ asset('vendors/css/select2.css') }}" />
+<link rel="stylesheet" href="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.css') }}" />
+        <link rel="stylesheet" href="{{ asset('vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" />
 @endpush
 
 
 @push('scripts')
-<script src="{{ asset('vendors/DataTables/media/js/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('vendors/DataTables/media/js/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('vendors/DataTables/extensions/Responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('vendors/js/moment.js') }}"></script>
 <script src="{{ asset('vendors/datetimepicker/bootstrap-datetimepicker.js') }}"></script>
