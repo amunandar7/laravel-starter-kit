@@ -11,6 +11,27 @@
 |
 */
 
+use App\Http\Controllers\DatatablesController;
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
-    return view('layouts.dashboard');
+    return view('dashboard.baselayout');
 });
+
+Route::get('/list/{entity}',
+    function ($entity) {
+        $class = new App\Http\Controllers\DatatablesController($entity);
+        return $class->index();
+    });
+
+Route::get('/list/{entity}/datatables',
+    function (Request $request, $entity) {
+        $class = new App\Http\Controllers\DatatablesController($entity);
+        return $class->ajax($request);
+    });
+
+Route::post('/modal/{entity}/{id}',
+    function ($entity, $id) {
+        $class = new App\Http\Controllers\DatatablesController($entity);
+        return $class->modal($id);
+    });
