@@ -4,34 +4,37 @@
 @section('content')
 
 <div class="box">
-    <div class="box-header">
-    @if($enable_add)
-        <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn btn-primary pull-right">Add</a>
-    @endif
-    @if(sizeof($filters) > 0)
-        <div class="row">
-            @foreach($filters AS $idx => $data)
-                <div class="col-12 col-sm-3">
-                    @if(!is_array($data[3]) && $data[3] == 'datepicker')
-                        <input id="dtFilter{{$idx}}" placeholder="{{$data[0]}}" class="form-control dt-datepicker" />
-                    @else
-                        <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' '}}">
-                            <option value="">{{$data[0]}}</option>
-                            @if(is_array($data[3]))
-                                @foreach($data[3] AS $val => $text)
-                                    <option value="{{$val}}">{{$text}}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    @endif
-                </div>
-            @endforeach
+    <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools pull-right">
+            @if($enable_add)
+                <a href="{{url(str_replace("list","form",url()->current()))}}/create" class="btn  btn-box-tool"><i class="fa fa-plus"></i> Add</a>
+            @endif
         </div>
-        <br>
-    @endif
     </div>
     <!-- /.box-header -->
     <div class="box-body">
+        @if(sizeof($filters) > 0)
+            <div class="row">
+                @foreach($filters AS $idx => $data)
+                    <div class="col-12 col-sm-3">
+                        @if(!is_array($data[3]) && $data[3] == 'datepicker')
+                            <input id="dtFilter{{$idx}}" placeholder="{{$data[0]}}" class="form-control dt-datepicker" />
+                        @else
+                            <select id="dtFilter{{$idx}}" class="form-control dtFilter{{ is_array($data[3]) ? '' : ' '}}">
+                                <option value="">{{$data[0]}}</option>
+                                @if(is_array($data[3]))
+                                    @foreach($data[3] AS $val => $text)
+                                        <option value="{{$val}}">{{$text}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+            <br>
+        @endif
         <table id="appTable" class="table table-bordered table-striped">
             <thead>
             <tr>

@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{ asset('vendors/Ionicons/css/ionicons.min.css') }}">
+    <!-- sweetalert -->
+    <link rel="stylesheet" href="{{ asset('vendors/bootstrap-sweetalert/sweetalert.css') }}">
+    <!-- Gritter -->
+    <link rel="stylesheet" href="{{ asset('vendors/gritter/css/jquery.gritter.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('css/AdminLTE.min.css') }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins

@@ -2,7 +2,6 @@
 
 namespace App\Http\Forms;
 
-use App\Helpers\Generator;
 use Illuminate\Support\Str;
 use Kris\LaravelFormBuilder\Form;
 use Illuminate\Support\Facades\DB;
@@ -10,14 +9,13 @@ use Illuminate\Support\Facades\DB;
 class BaseForm extends Form
 {
     protected $title;
-    protected $imageTypes = [];
+    protected $subtitle;
+    protected $imageTypes = ['image', 'logo', 'avatar', 'icon', 'picture'];
 
     public function insertData($entityName, $fields, $request)
     {
         $table        = $this->entityTableName($entityName);
-        $id           = Generator::uuid($table);
-        $inputs       = $this->getInputs($fields, $request, $id);
-        $inputs['id'] = $id;
+        $inputs       = $this->getInputs($fields, $request, null);
         if (array_key_exists("password", $inputs)) {
             $inputs["password"] = bcrypt($inputs["password"]);
         }
@@ -29,7 +27,7 @@ class BaseForm extends Form
     {
 
         $table  = $this->entityTableName($entityName);
-        $inputs = $this->getInputs($fields, $request, $id);
+        $inputs = $this->getInputs($fields, $request);
         if (array_key_exists("password", $inputs)) {
             $inputs["password"] = bcrypt($inputs["password"]);
         }
@@ -45,8 +43,7 @@ class BaseForm extends Form
     public function modifyEditForm($form)
     {
         foreach ($form->getFields() AS $name => $field) {
-            if (in_array($field->getType(),
-                    ['image', 'logo', 'avatar', 'icon', 'picture'])) {
+            if (in_array($field->getType(), $this->imageTypes)) {
                 $form->modify($name, 'image',
                     [
                     'rules' => []
@@ -68,7 +65,7 @@ class BaseForm extends Form
         return $form;
     }
 
-    protected function getInputs($fields, $request, $id)
+    protected function getInputs($fields, $request)
     {
         $inputs = [];
         foreach ($fields AS $name => $field) {
@@ -76,8 +73,8 @@ class BaseForm extends Form
                 if ($request->file($name)) {
                     $path     = $field->getOptions()['path'];
                     $ext      = $request->$name->extension();
-                    $filename = $id."-".time();
-                    $destinationPath = base_path().'/../seehat-files/images/'.Str::plural($path);
+                    $filename = Str::random(6).time();
+                    $destinationPath = storage_path().'/images/'.Str::plural($path);
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath);
                     }
@@ -88,15 +85,6 @@ class BaseForm extends Form
             } else {
                 $inputs[$name] = $request->$name;
             }
-        }
-        return $inputs;
-    }
-
-    protected function storeImages($request, $basefilename)
-    {
-        $inputs = [];
-        foreach ($this->imageTypes AS $image) {
-            $name = $image->getName();
         }
         return $inputs;
     }
@@ -115,5 +103,10 @@ class BaseForm extends Form
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function getSubtitle()
+    {
+        return $this->subtitle;
     }
 }

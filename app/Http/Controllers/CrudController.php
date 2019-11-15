@@ -16,6 +16,7 @@ class CrudController extends Controller
 
     use FormBuilderTrait;
     private $title;
+    private $subtitle;
     private $className;
     private $class;
     private $entityName;
@@ -30,13 +31,16 @@ class CrudController extends Controller
         }
         $this->class = new $className();
         $this->title = $this->class->getTitle();
+        $this->subtitle = $this->class->getSubtitle();
     }
 
     public function addForm($request, $formBuilder)
     {
-        $title = $this->title != null ? "Create " . $this->title : "Create " . StringHelper::humanize(str_replace("-", " ", $this->entityName));
+        $entityName = $this->entityName;
+        $title = $this->title != null ? $this->title : StringHelper::humanize(str_replace("-", " ", $entityName));
+        $subtitle = $this->subtitle != null ? $this->subtitle : "Create";
         $form = $this->buildAddForm($request, $formBuilder);
-        return view('layouts.form', compact("title", "form"));
+        return view('dashboard.form', compact("title","subtitle", "form", "entityName"));
     }
 
     protected function buildAddForm(Request $request, FormBuilder $formBuilder)
@@ -52,9 +56,11 @@ class CrudController extends Controller
 
     public function editForm($request, $formBuilder, $id)
     {
-        $title = $this->title != null ? "Edit " . $this->title : "Edit " . StringHelper::humanize(str_replace("-", " ", $this->entityName));
+        $entityName = $this->entityName;
+        $title = $this->title != null ? $this->title : StringHelper::humanize(str_replace("-", " ", $entityName));
+        $subtitle = $this->subtitle != null ? $this->subtitle : "Edit";
         $form = $this->buildEditForm($request, $formBuilder, $id);
-        return view('layouts.form', compact("title", "form"));
+        return view('dashboard.form', compact("title", "subtitle", "form", "entityName"));
     }
 
     protected function buildEditForm(Request $request, FormBuilder $formBuilder,
@@ -83,7 +89,7 @@ class CrudController extends Controller
         $request->validate($form->getRules());
 
         $form->insertData($this->entityName, $form->getFields(), $request);
-        $request->session()->flash('gritter', 'Create ' . StringHelper::humanize($this->entityName) . ' was Successful!');
+        $request->session()->flash('gritter', 'Create ' . StringHelper::humanize(str_replace("-", " ", $this->entityName)) . ' was Successful!');
         return redirect(str_replace("form", 'list', str_replace("/create", "", $request->path())));
     }
 
@@ -95,7 +101,7 @@ class CrudController extends Controller
         $request->validate($form->getRules());
 
         $form->updateData($this->entityName, $form->getFields(), $request, $id);
-        $request->session()->flash('gritter', 'Edit ' . StringHelper::humanize($this->entityName) . ' was Successful!');
+        $request->session()->flash('gritter', 'Edit ' . StringHelper::humanize(str_replace("-", " ", $this->entityName)) . ' was Successful!');
         return redirect($request->path());
     }
 
@@ -104,7 +110,7 @@ class CrudController extends Controller
         $id = $request->id;
         $form = $this->form($this->className);
         $form->deleteData($this->entityName, $id);
-        $request->session()->flash('gritter', 'Delete ' . StringHelper::humanize($this->entityName) . ' was Successful!');
+        $request->session()->flash('gritter', 'Delete ' . StringHelper::humanize(str_replace("-", " ", $this->entityName)) . ' was Successful!');
     }
 
     public function setTitle($title)
