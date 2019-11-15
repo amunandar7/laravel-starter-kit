@@ -11,6 +11,7 @@ class BaseForm extends Form
     protected $title;
     protected $subtitle;
     protected $imageTypes = ['image', 'logo', 'avatar', 'icon', 'picture'];
+    protected $passed_inputs = ['password_confirmation'];
 
     public function insertData($entityName, $fields, $request)
     {
@@ -52,7 +53,8 @@ class BaseForm extends Form
                 $form->modify('password', 'password',
                     [
                     'attr' => ['placeholder' => "Kosongkan jika tidak ingin mengganti password"],
-                    'rules' => ''
+                    'rules' => '',
+                    'value' => ''
                 ]);
             } else if ($name === "password_confirmation") {
                 $form->modify('password_confirmation', 'password',
@@ -74,15 +76,15 @@ class BaseForm extends Form
                     $path     = $field->getOptions()['path'];
                     $ext      = $request->$name->extension();
                     $filename = Str::random(6).time();
-                    $destinationPath = storage_path().'/images/'.Str::plural($path);
+                    $destinationPath = storage_path('images/'.Str::plural($path));
                     if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath);
+                        mkdir($destinationPath, 0777, true);
                     }
                     $request->file($name)->move($destinationPath,
                         $filename.'.'.$ext);
-                    $inputs[$name] = $filename.'.'.$ext;
+                    $inputs[$name] = $path."/".$filename.'.'.$ext;
                 }
-            } else {
+            } else if(!in_array($name, $this->passed_inputs)) {
                 $inputs[$name] = $request->$name;
             }
         }

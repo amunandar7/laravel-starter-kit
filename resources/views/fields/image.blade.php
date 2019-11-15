@@ -2,7 +2,9 @@
 $extentions = (array_key_exists("extentions", $options)) ? $options['extentions'] : [];
 $src = asset('images/dummy_image.png');
 if($options['value'] != null) {
-    $src = asset($options['value']);
+    $src = $options['value'];
+    if(substr( $src, 0, 4 ) != "http")
+        $src = url('image/'.$src);
 }
 ?>
 

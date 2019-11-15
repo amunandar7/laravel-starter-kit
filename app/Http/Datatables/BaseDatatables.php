@@ -124,42 +124,17 @@ class BaseDatatables
                     . '&nbsp;'
                     . '<a data-id="' . $data->id . '" href="javascript:;" data-click="delete" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Delete</a>';
             });
-        if (in_array("logo", $this->tableColumns)) {
-            $datatables->editColumn('logo',
-                function ($data) use ($request) {
-                    return $this->clickableImg(url($data->logo), '100px');
-                });
-            $this->dtRawColumns[] = 'logo';
-        }
-        if (in_array("picture", $this->tableColumns)) {
-            $datatables->editColumn('picture',
-                function ($data) use ($request) {
-                    return $this->clickableImg(url($data->picture), '100px');
-                });
-            $this->dtRawColumns[] = 'picture';
-        }
-        if (in_array("photo", $this->tableColumns)) {
-            $datatables->editColumn('photo',
-                function ($data) use ($request) {
-                    return $this->clickableImg(url('api/assets/images/profiles/' . $data->photo),
-                        '100px');
-                });
-            $this->dtRawColumns[] = 'photo';
-        }
-        if (in_array("icon", $this->tableColumns)) {
-            $datatables->editColumn('icon',
-                function ($data) use ($request) {
-                    return $this->clickableImg(url($data->icon), '100px');
-                });
-            $this->dtRawColumns[] = 'icon';
-        }
-        if (in_array("avatar", $this->tableColumns)) {
-            $datatables->editColumn('avatar',
-                function ($data) use ($request) {
-                    return $this->clickableImg(($data->avatar != null ? url($data->avatar)
-                        : url('img/dummy_profile.jpg')), '100px');
-                });
-            $this->dtRawColumns[] = 'avatar';
+        foreach ($this->imageColumnTypes AS $col) {
+            if (in_array($col, $this->tableColumns)) {
+                $datatables->editColumn($col,
+                    function ($data) use ($request, $col) {
+                        $src = $data->$col;
+                        if(substr( $src, 0, 4 ) != "http")
+                            $src = url('image/'.$src);
+                        return $this->clickableImg($src, '100px');
+                    });
+                $this->dtRawColumns[] = $col;
+            }
         }
         $datatables->rawColumns($this->dtRawColumns);
         return $datatables;

@@ -16,10 +16,24 @@ use App\Http\Controllers\DatatablesController;
 use App\Http\Select2\Select2Ajax;
 use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilder;
+use Illuminate\Support\Str;
 
 Route::get('/', function () {
     return redirect('/list/example');
 });
+
+
+Route::get('image/{path}/{filename}',
+    function ($path, $filename) {
+        $path = Str::plural($path);
+        $storagePath = storage_path('images/'.$path.'/'.$filename);
+        if (file_exists($storagePath)) {
+            $file = File::get($storagePath);
+            return response($file, 200)->header('Content-Type', 'png');
+        }
+        return Redirect::to(url('images/not-found.png'));
+    });
+
 
 Route::get('/list/{entity}',
     function ($entity) {

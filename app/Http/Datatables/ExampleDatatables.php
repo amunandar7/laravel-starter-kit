@@ -32,10 +32,6 @@ class ExampleDatatables extends BaseDatatables
     public function modifyDatatables($datatables, $request)
     {
         $datatables = parent::modifyDatatables($datatables, $request);
-        $datatables->editColumn('image',
-            function ($data) use ($request) {
-                return $this->clickableImg($data->image, '100px');
-            });
         $datatables->editColumn('name',
             function ($data) use ($request) {
                 return $this->modalAjaxLink(url('modal/example/' . $data->id),
