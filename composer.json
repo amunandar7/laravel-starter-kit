@@ -14,7 +14,8 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.7",
         "yajra/laravel-datatables-oracle": "^9.0",
-        "kris/laravel-form-builder": "1.6.*"
+        "kris/laravel-form-builder": "1.6.*",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
